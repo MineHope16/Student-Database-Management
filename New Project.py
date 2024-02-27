@@ -1,39 +1,14 @@
 from tkinter import *
-import mysql.connector as m
+import sqlite3 as m
 from tkinter import messagebox as mb
 
+DATABASE_file="student.db"
+
 #To create a database The_Student
-con1=m.connect(host='localhost',port=3309,user='root',passwd='tiger')
-cur_create=con1.cursor()
-cur_create.execute("create database if not exists The_Student;")
-cur_create.execute("use The_Student")
-
-#To create a database cursor for executing queries
-con=m.connect(host='localhost',port=3309,user='root',passwd='tiger',database='The_Student')
-cur_insert=con.cursor()
-cur_delete=con.cursor()
-cur_create.execute("create table if not exists students(name varchar(50), passwd varchar(50), mobile varchar(10), email varchar(50), rollno varchar(10), batch varchar(20), dob varchar(10), adhaar varchar(20), address varchar(100), gender varchar(20));")      
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+con=m.connect(DATABASE_file)
+cur_db=con.cursor()
+cur_db.execute("create table if not exists students(name varchar(50), passwd varchar(50), mobile varchar(10), email varchar(50), rollno varchar(10), batch varchar(20), dob varchar(10), adhaar varchar(20), address varchar(100), gender varchar(20));")      
+con.commit()
 
 
 def register_window():
@@ -90,7 +65,9 @@ def register_window():
     def register_DB():
         try:
             query=(f"insert into students values('{e1.get()}','{e2.get()}',{e4.get()},'{e5.get()}','','','','','','')")
-            a=cur_insert.execute(query)
+            con=m.connect(DATABASE_file)
+            cur_db=con.cursor()
+            a=cur_db.execute(query)
             con.commit()
             mb.showinfo('Successfull Execution','Student registeration successfully')
             clr()
@@ -155,7 +132,7 @@ def app_window2():
     win1.maxsize(500,280)
     
     # Load an image file
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file=r"c:\Users\admin\Downloads\GitHub\Student-Database-Management\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     win1.back_arrow_image = back_arrow_image
@@ -256,8 +233,8 @@ def app_window1():
 
         
     #Image for Student and Institue Login
-    student_image = PhotoImage(file='Student.png')
-    institute_image = PhotoImage(file='College.png')
+    student_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\Student.png')
+    institute_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\College.png')
 
 
 
