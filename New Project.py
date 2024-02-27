@@ -4,7 +4,7 @@ from tkinter import messagebox as mb
 
 DATABASE_file="student.db"
 
-#To create a database The_Student
+#To create a table The_Student
 con=m.connect(DATABASE_file)
 cur_db=con.cursor()
 cur_db.execute("create table if not exists students(name varchar(50), passwd varchar(50), mobile varchar(10), email varchar(50), rollno varchar(10), batch varchar(20), dob varchar(10), adhaar varchar(20), address varchar(100), gender varchar(20));")      
@@ -26,7 +26,7 @@ def register_window():
     root.maxsize(600,600)
     
     # Back Arrow
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file=r"C:\Users\admin\Downloads\GitHub\Student-Database-Management\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     root.back_arrow_image = back_arrow_image
@@ -78,7 +78,7 @@ def register_window():
 
 
     #Inserting a image
-    image1=PhotoImage(file="logo.png")
+    image1=PhotoImage(file="Student-Database-Management\logo.png")
     image1=image1.subsample(18,18)
     image_label=Label(root,text="REGISTER",font="times 12 bold",image=image1,bg="lightblue",compound=TOP)
     image_label.pack(pady=8)
@@ -158,7 +158,7 @@ def app_window2():
     #Login Button
     b2=Button(win1,text="Login",relief="groove",font=("arial",13,"bold"),width=15,height=1)
     b2.pack(pady=10)
-    b2.config(command=lambda:[destry(),login_window()])
+    b2.config()
 
     #Blank Label
     lblank1=Label(win1, bg="LightBlue")
@@ -179,33 +179,6 @@ def app_window2():
     win1.mainloop()
 
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 def app_window1():
     #Creating the application window ( " The Students " )
     win1=Tk()
@@ -220,7 +193,6 @@ def app_window1():
     win1.geometry(f"500x280+{x_dim}+{y_dim}")
     win1.minsize(500,280)
     win1.maxsize(500,280)
-
         
     #To destroy the window
     def destry():
@@ -229,15 +201,10 @@ def app_window1():
     #Label for the Title
     l1=Label(win1,text=" THE STUDENTS ",font=("Times",30,"bold"),bg="LightBlue",fg="grey",relief="ridge")
     l1.pack(pady=40)
-
-
         
     #Image for Student and Institue Login
     student_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\Student.png')
     institute_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\College.png')
-
-
-
         
     #Button for Student and Institute Login
     student_button = Button(win1, image=student_image, text="Student Login", bg="LightBlue", borderwidth=0, activebackground="LightBlue")
@@ -258,8 +225,7 @@ def app_window1():
 
     #Credit Label
     l2=Label(win1,text="designed by DATTARAM KOLTE",font=("calibri",8,"bold"),bg="LightBlue")
-    l2.pack(side=BOTTOM)   
-
+    l2.pack(side=BOTTOM)
     win1.mainloop()
 
 
