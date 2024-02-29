@@ -26,7 +26,7 @@ def register_window():
     root.maxsize(600,600)
     
     # Back Arrow
-    back_arrow_image = PhotoImage(file=r"C:\Users\admin\Downloads\GitHub\Student-Database-Management\BackArrow.png")
+    back_arrow_image = PhotoImage(file="BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     root.back_arrow_image = back_arrow_image
@@ -78,7 +78,7 @@ def register_window():
 
 
     #Inserting a image
-    image1=PhotoImage(file="Student-Database-Management\logo.png")
+    image1=PhotoImage(file="logo.png")
     image1=image1.subsample(18,18)
     image_label=Label(root,text="REGISTER",font="times 12 bold",image=image1,bg="lightblue",compound=TOP)
     image_label.pack(pady=8)
@@ -132,7 +132,7 @@ def app_window2():
     win1.maxsize(500,280)
     
     # Load an image file
-    back_arrow_image = PhotoImage(file=r"c:\Users\admin\Downloads\GitHub\Student-Database-Management\BackArrow.png")
+    back_arrow_image = PhotoImage(file="BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     win1.back_arrow_image = back_arrow_image
@@ -203,8 +203,8 @@ def app_window1():
     l1.pack(pady=40)
         
     #Image for Student and Institue Login
-    student_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\Student.png')
-    institute_image = PhotoImage(file=r'C:\Users\admin\Downloads\GitHub\Student-Database-Management\College.png')
+    student_image = PhotoImage(file='Student.png')
+    institute_image = PhotoImage(file='College.png')
         
     #Button for Student and Institute Login
     student_button = Button(win1, image=student_image, text="Student Login", bg="LightBlue", borderwidth=0, activebackground="LightBlue")
