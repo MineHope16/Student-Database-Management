@@ -6,7 +6,8 @@ import random
 import regex as re
 
 DATABASE_file="student.db"
-
+TABLE_NAME="students"
+USER_TABLE=""
 #To create a table The_Student
 con=sqlite3.connect(DATABASE_file)
 cur_db=con.cursor()
@@ -14,8 +15,8 @@ cur_db.execute("""
     CREATE TABLE IF NOT EXISTS students (
         rollno INTEGER PRIMARY KEY AUTOINCREMENT DEFAULT 237701,
         name VARCHAR(50),
-        passwd VARCHAR(50),
         email VARCHAR(50),
+        passwd VARCHAR(50),
         mobile VARCHAR(10),
         batch VARCHAR(20),
         dob VARCHAR(10),
@@ -46,6 +47,10 @@ def is_table_exists(table_name):
     
     # If the result is not None, the table exists
     return result is not None
+
+
+
+
 
 
 def register_window():
@@ -92,6 +97,7 @@ def register_window():
                     e3.config(fg="black")
                     blabel.config(text="")
                     email=e2.get()
+
                     if is_table_exists(email.split('@')[0]):
                         clr()
                         a=msg.askyesno("Email ID already exist","If you wish to Login to the entered email\nClick \"OK\"")
@@ -124,9 +130,11 @@ def register_window():
                                     login_button.place(x=18,y=110)
 
                                 else:
+                                    
                                     msg.showwarning("Invalid Password","You have entered the wrong password.\nTry Again")
+                                    er2.delete(0,"end")
                             rootk=Tk()
-                            rootk.title("Desktop Notifier")
+                            rootk.title("The Students")
                             rootk.config(bg="LightBlue")
                             rootk.geometry("500x220")
                             rootk.minsize(500,220)
@@ -162,7 +170,7 @@ def register_window():
                             lr2.place(anchor=CENTER,x=105,y=140)
                             #Creating Password textbox
                             er2=Entry(rootk,width=23,show="*",font="calbri")
-                            er2.place(anchor=CENTER,x=300,y=140)
+                            er2.place(anchor=CENTER,x=320,y=140)
 
                             login_button=Button(rootk,text="Login",bg="white",fg="LightBlue",font="arial 12 bold",height=20,width=50,relief=GROOVE)
                             login_button.pack(anchor=CENTER)
@@ -199,9 +207,19 @@ def register_window():
                         root1.destroy()
                         con1=sqlite3.connect(DATABASE_file)
                         cur_db=con1.cursor()
-                        user_email=e5.get()
-                        query=(f"insert into {TABLE_NAME} values('{e1.get()}','{e2.get()}',{e4.get()},'{e5.get()}')")
+                        user_email=e2.get()
+                        user_email=user_email.split('@')[0]
+                        global USER_TABLE
+                        USER_TABLE=user_email
+                        query = f"INSERT INTO {TABLE_NAME} (name, email, passwd) VALUES ('{e1.get()}', '{e2.get()}', '{e4.get()}')"
                         cur_db.execute(query)
+                        cur_db.execute(f"""
+                            CREATE TABLE IF NOT EXISTS {USER_TABLE} (
+                                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                name VARCHAR(50),
+                                notifi VARCHAR(200)
+                            );
+                        """)
                         con1.commit()
                         con1.close()
                         a=msg.showinfo('Successfull Execution','User registeration successfully')
@@ -213,7 +231,7 @@ def register_window():
                             root.destroy()
 
                             rootk=Tk()
-                            rootk.title("Desktop Notifier")
+                            rootk.title("The Students")
                             rootk.config(bg="LightBlue")
                             rootk.geometry("400x200")
                             rootk.minsize(400,200)
@@ -252,25 +270,41 @@ def register_window():
             
             s=smtplib.SMTP_SSL("smtp.gmail.com",465)
             s.login('shubhuu5171@gmail.com',"gzstnwbzcfevtjea")
-            send_to=e5.get()
+            send_to=e2.get()
             msgg=f"The OPT for Student registeration is {OTP1} \n\nThanks for choosing us."
             s.sendmail('shubhuu5171@gmail.com',send_to,msgg)
 
-            root1=Tk()
+            def on_entry_click(event):
+                E2.delete(0, 'end')  # Clear the default text when clicked
+                E2.config(fg='black')  # Change text color to black
+
+            def submit_on_enter(event):
+                verify()
+
+            root1 = Tk()
             root1.geometry("400x100")
             root1.title("OTP Verification")
             root1.config(background="LightBlue")
-            l1=Label(root1,text=" Notifier ",font=("Times",15,"bold"),bg="LightBlue",fg="white",relief="ridge")
+
+            l1 = Label(root1, text=" Notifier ", font=("Times", 15, "bold"), bg="LightBlue", fg="white", relief="ridge")
             l1.pack(pady=10)
 
-            l2=Label(root1,text="Enter OTP:",font=('Calibri',10,'bold'),bg="salmon")
-            l2.place(x=30,y=60)
+            l2 = Label(root1, text="Enter OTP:", font=('Calibri', 10, 'bold'), bg="salmon")
+            l2.place(x=30, y=60)
 
-            E2=Entry(root1,font=('Calibri',10,'bold'))
-            E2.place(x=120,y=60)
+            E2 = Entry(root1, font=('Calibri', 10, 'bold'))
+            E2.insert(0, "Enter OTP")  # Set default text
+            E2.bind("<FocusIn>", on_entry_click)  # Bind focus event
+            E2.place(x=120, y=60)
+            E2.focus_set()  # Set focus to the entry field
 
-            B2=Button(root1,text='Submit',command=verify,font=('Calibri',8,'bold'),bg="bisque",relief=GROOVE)
-            B2.place(x=280,y=60)
+            B2 = Button(root1, text='Submit', command=verify, font=('Calibri', 8, 'bold'), bg="bisque", relief=GROOVE)
+            B2.place(x=280, y=60)
+
+            # Bind the "Enter" key to the "Submit" button
+            root1.bind('<Return>', submit_on_enter)
+
+            root1.mainloop()
 
 
     # Inserting an image
@@ -332,21 +366,6 @@ def register_window():
 
     # Start the Tkinter main loop
     root.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -461,8 +480,6 @@ def app_window1():
     l2=Label(win1,text="designed by DATTARAM KOLTE",font=("calibri",8,"bold"),bg="LightBlue")
     l2.pack(side=BOTTOM)
     win1.mainloop()
-
-
 
 #MAIN EXECUTION
 register_window()
