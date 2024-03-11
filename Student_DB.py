@@ -48,6 +48,8 @@ def is_table_exists(table_name):
     # If the result is not None, the table exists
     return result is not None
 
+def student_main_window():
+    pass
 
 def student_window():
        
@@ -89,7 +91,7 @@ def student_window():
 
         con=sqlite3.connect(DATABASE_file)
         cur_db=con.cursor()
-        query=(f"update students set mobile='{mob}',rollno='{roll}',batch='{batch}',dob='{dob}',adhaar='{adh}',address='{addr}',gender='{gen}' where email='{USER_TABLE}'")
+        query=(f"update students set mobile='{mob}',rollno='{roll}',batch='{batch}',dob='{dob}',adhaar='{adh}',address='{addr}',gender='{gen}' where email='{USER_TABLE + "@gmail.com"}'")
         cur_db.execute(query)
         con.commit()
         con.close()
@@ -110,17 +112,18 @@ def student_window():
             con.close()
             a=msg.askquestion("The Students","Student deleted successfully")
             root.destroy()
-            login_window()
+            app_window2()
             
     def update_info():
-
         con=sqlite3.connect(DATABASE_file)
         cur_db=con.cursor()
         print(USER_TABLE)    
         query=(f"select * from students where email='{USER_TABLE + "@gmail.com"}'")
+        print(f"select * from students where email='{USER_TABLE + "@gmail.com"}'")
         cur_db.execute(query)
         a=cur_db.fetchone()
-        #Update Info
+        print(a)
+        #Update Info                
         e1.insert(0,a[1])
         e1.config(state=DISABLED)
         e2.insert(0,a[0])
@@ -137,115 +140,161 @@ def student_window():
         e7.insert(0,a[4])    
         e9.insert(INSERT,a[8])   
 
-
-    #Creating Profile Window    
-    root=Tk()
+    # Creating Profile Window
+    root = Tk()
     root.title("The Students")
-    root.config(bg="LightBlue")    
+    root.config(bg="#4DA6FF")  # Updated background color
 
     screen_width = root.winfo_screenwidth()
     screen_height = root.winfo_screenheight()
-    x_dim=(screen_width-500)//2
-    y_dim=(screen_height-650)//2
-    
-    root.geometry(f"500x650+{x_dim}+{y_dim}")
-    root.minsize(600,650)
-    root.maxsize(600,650) 
+    x_dim = (screen_width - 500) // 2
+    y_dim = ((screen_height - 700) // 2)-50
 
-    #Creating Name Label
-    l1=Label(root,text="Student Name",font=("arial",14,"bold"),bg="lightblue")
-    l1.place(anchor=CENTER,x=150,y=130)
-    #Creating Textbox of Name Label
-    e1=Entry(root,width=26,font="calibri")
-    e1.place(anchor=CENTER,x=350,y=130)
-    
+    root.geometry(f"500x700+{x_dim}+{y_dim}")
+    root.minsize(600, 700)
+    root.maxsize(600, 700)
 
-    #Creating RollNo Label
-    l2=Label(root,text="Roll No",font=("arial",14,"bold"),bg="lightblue")
-    l2.place(anchor=CENTER,x=155,y=170)
-    #Creating RollNo textbox
-    e2=Entry(root,width=23,font="calbri")
-    e2.place(anchor=CENTER,x=350,y=170)
-    
-    #Creating Batch Label
-    l3=Label(root,text="Batch",font=("arial",14,"bold"),bg="lightblue")
-    l3.place(anchor=CENTER,x=155,y=210)
-    #Creating Batch textbox
-    e3=Entry(root,width=23,font="calbri")
-    e3.place(anchor=CENTER,x=350,y=210)
+    # Back Arrow
+    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image=back_arrow_image.subsample(15,15)
+    # Keep a reference of the photo image
+    root.back_arrow_image = back_arrow_image
 
-    #Creating DOB Label
-    l4=Label(root,text="Date of Birth",font=("arial",14,"bold"),bg="lightblue")
-    l4.place(anchor=CENTER,x=155,y=250)
-    #Creating DOB textbox
-    e4=Entry(root,width=23,font="calbri")
-    e4.place(anchor=CENTER,x=350,y=250)
+    # Create an image button with the correct reference
+    button = Button(root, image=root.back_arrow_image, bg="#4DA6FF", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [root.destroy(), app_window1()])
+    button.place(x=10, y=10)
 
-    #Creating Label and Textbox of Gender
-    var1=StringVar()
-    var1.set(" ")
-    l5=Label(root,text="Gender",font=("arial",14,"bold"),bg="lightblue")
-    l5.place(anchor=CENTER,x=140,y=290)
-    r1=Radiobutton(root,text="Male",font="airal 10 bold",activebackground="lightblue",variable=var1,value="Male",bg="lightblue")
-    r1.place(anchor=CENTER,x=270,y=290)
-    r2=Radiobutton(root,text="Female",font="arial 10 bold",activebackground="lightblue",variable=var1,value="Female",bg="lightblue")
-    r2.place(anchor=CENTER,x=350,y=290)
+    # Frame to organize labels and entries
+    frame = Frame(root, bg="#4DA6FF", pady=10,relief="groove", borderwidth=5, width=200, height=350)
+    frame.place(anchor=NW, x=50, y=100)
 
-
-    #Creating Adhaar Number Label
-    l6=Label(root,text="Adhaar Number",font=("arial",14,"bold"),bg="lightblue")
-    l6.place(anchor=CENTER,x=150,y=330)
-    #Creating AdhaarNumber textbox
-    e6=Entry(root,width=22,font="calbri")
-    e6.place(anchor=CENTER,x=350,y=330)
-
-    
-    #Creating Mobile No Label
-    l7=Label(root,text="Mobile Number",font=("arial",14,"bold"),bg="lightblue")
-    l7.place(anchor=CENTER,x=150,y=370)
-    #Creating Textbox of Mobile No Label
-    e7=Entry(root,width=25,font="calibri")
-    e7.place(anchor=CENTER,x=350,y=370)
-
-    #Creating Email Label
-    l8=Label(root,text="E-mail ID",font=("arial",14,"bold"),bg="lightblue")
-    l8.place(anchor=CENTER,x=150,y=410)
-    #Creating Textbox of Email Label
-    e8=Entry(root,width=25,font="calibri")
-    e8.place(anchor=CENTER,x=350,y=410)
-
-    #Creating Address Label
-    l9=Label(root,text="Address",font=("arial",14,"bold"),bg="lightblue")
-    l9.place(anchor=CENTER,x=150,y=450)
-    #Creating Textbox of Address Label
-    e9=Text(root,width=25,height=3,font="calibri",wrap=WORD)
-    e9.place(anchor=CENTER,x=350,y=470)
-
-    #Creating a button to Update
-    b1=Button(root,text="Update",relief="groove",font=("arial",13,"bold"),height=1)
-    b1.place(anchor=CENTER,x=260.5,y=570)
-    b1.config(command=stud_update)
-
-    #Creating a button to Delete
-    b1=Button(root,text="Delete",relief="groove",font=("arial",13,"bold"),height=1)
-    b1.place(anchor=CENTER,x=260.5,y=620)
-    b1.config(command=stud_delete)
-    
-    #Creating a button to back
-    b2=Button(root,text="Logout",relief="groove",font=("arial",13,"bold"),width=6,height=1)
-    b2.place(anchor=CENTER,x=167,y=570)
-    b2.config(command=logO)
-
-    #Inserting a image
-    image1=PhotoImage(file="logopp.png")
-    image1=image1.subsample(18,18)
-    image_label=Label(root,text="Student Info",font="times 12 bold",image=image1,bg="lightblue",compound=TOP)
+    # Inserting an image
+    image1 = PhotoImage(file="logopp.png")
+    image1 = image1.subsample(18, 18)
+    image_label = Label(root, text="Student Info", font="times 14 bold", image=image1, bg="#4DA6FF", fg="white", compound=TOP)
     image_label.pack(pady=8)
 
-    #Creating a button to Feedback    
-    b3=Button(root,text="Feedback",relief="groove",font=("arial",13,"bold"),width=8,height=1)
-    b3.place(anchor=CENTER,x=360,y=570)
-    b3.config(command=feedback)  
+    # Stylish font for labels and entries
+    font_style = ("Arial", 14, "bold")
+
+    # Creating Name Label
+    l1 = Label(frame, text=" Student Name ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")  # Updated text and foreground color
+    l1.grid(row=0, column=0, pady=10, padx=10, sticky=W)
+    # Creating Textbox of Name Label
+    e1 = Entry(frame, width=26, font="cambria")
+    e1.grid(row=0, column=1, pady=10, padx=10, sticky=W)
+
+
+    # Creating RollNo Label
+    l2 = Label(frame, text=" Roll No ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l2.grid(row=1, column=0, pady=10, padx=10, sticky=W)
+    # Creating RollNo textbox
+    e2 = Entry(frame, width=26, font="cambria")
+    e2.grid(row=1, column=1, pady=10, padx=10, sticky=W)
+
+    # Creating Batch Label
+    l3 = Label(frame, text=" Batch ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l3.grid(row=2, column=0, pady=10, padx=10, sticky=W)
+    # Creating Batch textbox
+    e3 = Entry(frame, width=26, font="cambria")
+    e3.grid(row=2, column=1, pady=10, padx=10, sticky=W)
+
+
+    # Creating DOB Label
+    l4 = Label(frame, text=" Date of Birth ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l4.grid(row=3, column=0, pady=10, padx=10, sticky=W)
+    # Creating DOB textbox
+    e4 = Entry(frame, width=26, font="cambria")
+    e4.grid(row=3, column=1, pady=10, padx=10, sticky=W)
+    
+
+    # Creating Label and Textbox of Gender
+    l5 = Label(frame, font=font_style, bg="#4DA6FF", fg="white")
+    l5.grid(row=4, column=0, pady=10, padx=10, sticky=W)
+    l5 = Label(frame, font=font_style, bg="#4DA6FF", fg="white")
+    l5.grid(row=4, column=0, pady=10, padx=10, sticky=W)
+    l5 = Label(frame, font=font_style, bg="#4DA6FF", fg="white")
+    l5.grid(row=4, column=0, pady=10, padx=10, sticky=W)
+
+    var1=StringVar()
+    var1.set(" ")
+    l5=Label(frame,text=" Gender ",font=font_style,bg="#4DA6FF",fg="White",relief="groove")
+    l5.place(anchor=CENTER,x=52,y=215)
+    r1=Radiobutton(frame,text="Male",font="cambria 12",activebackground="#4DA6FF",variable=var1,value="Male",bg="#4DA6FF")
+    r1.place(anchor=CENTER,x=218,y=215)
+    r2=Radiobutton(frame,text="Female",font="cambria 12",activebackground="#4DA6FF",variable=var1,value="Female",bg="#4DA6FF")
+    r2.place(anchor=CENTER,x=418,y=215)
+
+    # Creating Adhaar Number Label
+    l6 = Label(frame, text=" Adhaar Number ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l6.grid(row=5, column=0, pady=10, padx=10, sticky=W)
+    # Creating AdhaarNumber textbox
+    e6 = Entry(frame, width=26, font="cambria")
+    e6.grid(row=5, column=1, pady=10, padx=10, sticky=W)
+
+    # Creating Mobile No Label
+    l7 = Label(frame, text=" Mobile Number ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l7.grid(row=6, column=0, pady=10, padx=10, sticky=W)
+    # Creating Textbox of Mobile No Label
+    e7 = Entry(frame, width=26, font="cambria")
+    e7.grid(row=6, column=1, pady=10, padx=10, sticky=W)
+
+
+    # Creating Email Label
+    l8 = Label(frame, text=" E-mail ID ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l8.grid(row=7, column=0, pady=10, padx=10, sticky=W)
+    # Creating Textbox of Email Label
+    e8 = Entry(frame, width=26, font="cambria")
+    e8.grid(row=7, column=1, pady=10, padx=10, sticky=W)
+
+
+    # Creating Address Label
+    l9 = Label(frame, text=" Address ", font=font_style, bg="#4DA6FF", fg="white",relief="groove")
+    l9.grid(row=8, column=0, pady=10, padx=10, sticky=W)
+
+    # Creating Textbox of Address Label
+    e9 = Text(frame, width=32, height=3, font="cambria 12", wrap=WORD)
+    e9.grid(row=8, column=1, pady=10, padx=10, sticky=W)
+
+
+    # Creating a button to Update
+    b1 = Button(root, text="Update", relief="groove", font=font_style, height=1, width=10, bg="#4CAF50", fg="white")  # Updated colors and width
+    b1.place(anchor=CENTER, x=310, y=620)
+    b1.config(command=stud_update)
+
+    # Creating a button to Delete
+    b2 = Button(root, text="Delete", relief="groove", font=font_style, height=1, width=10, bg="#FF4C4C", fg="white")  # Updated colors and width
+    b2.place(anchor=CENTER, x=170, y=670)
+    b2.config(command=stud_delete)
+
+    # Creating a button to back
+    b3 = Button(root, text="Logout", relief="groove", font=font_style, width=10, height=1, bg="#FFD700", fg="black")  # Updated colors and width
+    b3.place(anchor=CENTER, x=310, y=670)
+    b3.config(command=logO)
+
+    # Creating a button to Feedback
+    b4 = Button(root, text="Feedback", relief="groove", font=font_style, width=10, height=1, bg="#1E90FF", fg="white")  # Updated colors and width
+    b4.place(anchor=CENTER, x=452, y=670)
+    b4.config(command=feedback)
+
+
+    # Colon's
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=10)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=58)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=103)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=152)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=248)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=296)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=344)
+    colon_label=Label(frame,text=":",font=font_style,fg="Black",bg="#4DA6FF")
+    colon_label.place(x=175,y=415)  
 
 
     update_info()
@@ -287,7 +336,7 @@ def login_window():
 
             if a[0]==er2.get():
                 global USER_TABLE
-                USER_TABLE=email
+                USER_TABLE=email.split('@')[0]
                 msg.showinfo('Login Successfully','You have entered valid credentials')
                 lr1.destroy()
                 er1.destroy()
@@ -362,9 +411,14 @@ def login_window():
     er2=Entry(rootk,width=24,show="*",font="calbri")
     er2.place(anchor=CENTER,x=328,y=155)
 
+    def submit_on_enter(event):
+        chck_pass()
+
     login_button=Button(rootk,text="Login",bg="white",fg="LightBlue",height=10,font="arial 12 bold",width=50,relief=GROOVE)
     login_button.pack(anchor=CENTER)
     login_button.config(command=chck_pass)
+    # Bind the "Enter" key to the "Submit" button
+    login_button.bind('<Return>', submit_on_enter)
     
     rootk.mainloop()
 
@@ -390,7 +444,7 @@ def register_window():
     root.back_arrow_image = back_arrow_image
 
     # Create an image button with the correct reference
-    button = Button(root, image=root.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), app_window1()])
+    button = Button(root, image=root.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), app_window2()])
     button.place(x=10, y=10)
 
     
@@ -435,7 +489,7 @@ def register_window():
 
                                 if a[0]==er2.get():
                                     global USER_TABLE
-                                    USER_TABLE=email
+                                    USER_TABLE=email.split('@')[0]
                                     msg.showinfo('Login Successfully','You have entered valid credentials')
                                     lr1.destroy()
                                     er1.destroy()
@@ -479,7 +533,7 @@ def register_window():
                             lr1.place(anchor=CENTER,x=57,y=100)
                             #Creating Textbox of Email
                             er1=Label(rootk,width=25,text=email,font="calibri",fg="white",bg="LightBlue",justify=LEFT,anchor=W,relief="groove")
-                            er1.place(anchor=CENTER,x=300,y=100)
+                            er1.place(anchor=CENTER,x=320,y=100)
 
                             #Creating Password Label
                             lr2=Label(rootk,text="Enter Password ",relief=GROOVE,font=("arial",14,"bold"),bg="LightBlue")
@@ -488,9 +542,14 @@ def register_window():
                             er2=Entry(rootk,width=23,show="*",font="calbri")
                             er2.place(anchor=CENTER,x=320,y=140)
 
+                            def submit_on_enter(event):
+                                chck_cred()
+
                             login_button=Button(rootk,text="Login",bg="white",fg="LightBlue",font="arial 12 bold",height=20,width=50,relief=GROOVE)
                             login_button.pack(anchor=CENTER)
                             login_button.config(command=chck_cred)
+                            # Bind the "Enter" key to the "Submit" button
+                            login_button.bind('<Return>', submit_on_enter)
                             
                             rootk.mainloop()
                     else:
@@ -515,9 +574,9 @@ def register_window():
 
     #Connection of Database
     def register_DB():
-            def verify():
+            def verify():                
                 if(OTP1 == E2.get()):
-                    try:
+                    try:                        
                         root1.destroy()
                         con1=sqlite3.connect(DATABASE_file)
                         cur_db=con1.cursor()
@@ -525,15 +584,15 @@ def register_window():
                         user_email=user_email.split('@')[0]
                         global USER_TABLE
                         USER_TABLE=user_email
-                        query = f"INSERT INTO {TABLE_NAME} (name, email, passwd) VALUES ('{e1.get()}', '{e2.get()}', '{e4.get()}')"
+                        print("HERE1")
+                        query = f"INSERT INTO {TABLE_NAME} (name, email, passwd) VALUES ('{e1.get()}','{e2.get()}','{e4.get()}');"
+                        print(query)
                         cur_db.execute(query)
-                        cur_db.execute(f"""
-                            CREATE TABLE IF NOT EXISTS {USER_TABLE} (
-                                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                name VARCHAR(50),
-                                notifi VARCHAR(200)
-                            );
-                        """)
+                        con1.commit()
+                        print("HERE2")
+                        query=f"CREATE TABLE IF NOT EXISTS {USER_TABLE} (id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(50), notifi VARCHAR(200));"
+                        print(query)
+                        cur_db.execute(query)
                         con1.commit()
                         con1.close()
                         a=msg.showinfo('Successfull Execution','User registeration successfully')
