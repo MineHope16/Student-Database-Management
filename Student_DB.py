@@ -231,6 +231,125 @@ def student_window4():
 def student_window3():    
     #for Institute
 
+    def ind_notify():
+        def fetch_emails():
+            # Connect to your SQLite database
+            conn = sqlite3.connect(DATABASE_file)
+            cursor = conn.cursor()
+
+            # Fetch emails from the "notification" table
+            cursor.execute(f"SELECT email FROM {TABLE_NAME}")
+            emails = cursor.fetchall()
+
+            # Close the connection
+            conn.close()
+
+            # Extract emails from the result
+            emails_list = ["Select User"]  # Adding "Select User" as the default option
+            emails_list.extend([email[0] for email in emails])
+
+            return emails_list
+
+
+        def send_notification():
+            
+            try:
+                selected_email_value = selected_email.get()
+                if selected_email_value=="Select User":
+                    raise ValueError("Please select the email")
+                notification_subject = "The Students Notification"  # Get the subject from the entry field
+                notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
+                # SMTP Configuration
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587  # TLS Port
+                smtp_username = "shubhuu5171@gmail.com"  # Update with your email
+                smtp_password = "gzstnwbzcfevtjea"  # Update with your password
+
+                # Create SMTP connection
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    server.starttls()
+                    server.login(smtp_username, smtp_password)
+
+                    # Construct and send the email
+                    email_message = f"Subject: {notification_subject}\n\n"
+                    email_message += f"Dear Employee,\n\n{notification_message}\n\nBest Regards,\nShubham Navale\n(CEO)"
+                    server.sendmail(smtp_username, selected_email_value, email_message)
+
+                
+                                    
+                
+                connection = sqlite3.connect(DATABASE_file)
+                cur_db = connection.cursor()
+                
+                notification_msg = f"{notification_message} - Shubham Navale (CEO)"  # Appending additional information
+                
+                # Using parameterized queries to prevent SQL injection attacks
+                cur_db.execute(f"UPDATE {TABLE_NAME} SET notifi=? WHERE email=?", (notification_msg, selected_email_value))
+                
+                
+                connection.commit()
+                msg.showinfo("Email sent successfully",f"The email has sent to {selected_email_value} successfully.")
+
+            except Exception as e:
+                msg.showerror("Error has occured !",e)
+                print(e)
+
+            finally:
+                connection.close()
+
+                
+        win1 = Tk()
+        win1.title("Notifier")
+        win1.config(bg="MediumPurple1")
+
+        screen_width = win1.winfo_screenwidth()
+        screen_height = win1.winfo_screenheight()
+        x_dim = (screen_width - 500) // 2
+        y_dim = (screen_height - 400) // 2
+
+        win1.geometry(f"500x400+{x_dim}+{y_dim}")
+        win1.minsize(500, 400)
+        win1.maxsize(500, 400)
+
+        # Label for the Title
+        l1 = Label(win1, text=" Notifier ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
+        l1.pack(pady=20)
+
+        # Dropdown list for emails
+        emails = fetch_emails()
+        selected_email = StringVar(win1)
+        selected_email.set(emails[0])  # Set default value
+        email_dropdown = OptionMenu(win1, selected_email, *emails)
+        email_dropdown.pack(pady=10)
+
+        info_label=Label(win1,text="Type the message you want to send",font="arial 10 bold",fg="Black",bg="MediumPurple1")
+        info_label.pack(pady=10)
+
+        def on_click(event):
+            notification_text.delete("1.0", "end-1c")
+            notification_text.config(fg="Black")         
+
+        # Text box for notification message
+        notification_text = Text(win1, height=8, width=60, fg="Grey",wrap="word")
+        notification_text.insert("1.0", "Type Here...")
+        notification_text.bind("<FocusIn>", on_click)
+        notification_text.pack(pady=10)
+
+        # Send Notification Button
+        b2 = Button(win1, text="Send Notification", relief="groove", font=("arial", 10, "bold"), bg="Salmon", width=30, command=send_notification)
+        b2.pack(pady=10)
+
+        # Blank Label
+        lblank1 = Label(win1, bg="MediumPurple1")
+        lblank1.pack()
+
+        win1.mainloop()
+
+
+    def mass_notify():
+        pass
+
+
     def notifi():
         #Creating the application window ( " The Students " )
         win1=Tk()
@@ -287,12 +406,12 @@ def student_window3():
         #Register Button
         b1=Button(win1,text="Individual Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="DarkOliveGreen1")
         b1.pack(pady=10)
-        b1.config(command=lambda:[destry(),register_window()])
+        b1.config(command=lambda:[destry(),ind_notify()])
 
         #Login Button
         b2=Button(win1,text="Mass Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="Maroon1")
         b2.pack(pady=10)
-        b2.config(command=lambda:[destry(),login_window()])
+        b2.config(command=lambda:[destry(),mass_notify()])
 
         #Blank Label
         lblank1=Label(win1, bg="LightBlue")
@@ -375,6 +494,7 @@ def student_window3():
             msg.showerror("Error has occured","Search only the valid \"Roll No\" of the student")
             print(e)  
 
+    
     back_ground="LightBlue"
 
     root=Tk()
