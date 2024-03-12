@@ -1,11 +1,48 @@
 from tkinter import * 
-from tkinter import *
+import os
+from tkinter import filedialog
 import sqlite3
 from tkinter import messagebox as msg
 import smtplib
 import random
 import regex as re
 import datetime as date
+from PIL import Image,ImageTk
+
+def showimage():
+    global filename
+    global img
+
+    filename=filedialog.askopenfilename(initialdir=os.getcwd(),title="Select Image",filetype=(("PNG File","*.png"),("JPG File","*.jpg"),("All Files","*.txt")))
+    img=(Image.open(filename))
+    resized_image=img.resize((150,170))
+    photo2=ImageTk.PhotoImage(resized_image)
+    stud_image_label.config(image=photo2)
+    stud_image_label.image=photo2
+    
+    print("Student Images/"+str(reg_var.get())+".png")
+    img.save("Student Images/"+str(reg_var.get())+".png")
+
+def clear():
+    name_var.set(" ")
+    roll_no_var.set(" ")
+    email_var.set(" ")
+    batch_var.set(" ")
+    mobile_var.set(" ")
+    dob_var.set(" ")
+    gender_var.set(" ")
+    aadhaar_var.set(" ")
+    address_var.set(" ")
+    reg_var.set(" ")
+    
+    img1=(Image.open("image.png"))
+    resized_image=img1.resize((150,170))
+    photo2=ImageTk.PhotoImage(resized_image)
+    stud_image_label.config(image=photo2)
+    stud_image_label.image=photo2
+
+    img=""
+
 
 back_ground="LightBlue"
 
@@ -54,6 +91,12 @@ dob_var=StringVar()
 gender_var=StringVar()
 aadhaar_var=StringVar()
 address_var=StringVar()
+reg_var=StringVar()
+
+name_label=Label(root,text="Student Name :",bg=back_ground,fg="Gray32",font="cambria 16 bold").place(x=180,y=200)
+name_label_entry=Entry(root,width=26,textvariable=name_var,font="cambria 14",bg=back_ground,relief=FLAT).place(x=335,y=203)
+reg_label=Label(root,text="Registeration No.:",bg=back_ground,fg="Gray32",font="cambria 16 bold").place(x=180,y=230)
+reg_label_entry=Entry(root,width=26,textvariable=reg_var,font="cambria 14",bg=back_ground,relief=FLAT).place(x=365,y=233)
 
 
 roll_no_label=Label(frame,text="Roll No",bg=back_ground,fg="Black",font="cambria 14").place(x=20,y=20)
@@ -86,12 +129,21 @@ update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activeb
 
 
 #Image Frame
-image_frame=Frame(root,bd=2,bg=back_ground,width=150,height=170,relief="ridge")
+image_frame=Frame(root,bd=2,bg=back_ground,width=150,height=170,relief="groove")
 image_frame.place(x=20,y=80)
 
+img1=(Image.open("image.png"))
+resized_image=img1.resize((150,170))
+photo2=ImageTk.PhotoImage(resized_image)
 stud_image=PhotoImage(file="image.png")
-stud_image_label=Label(image_frame,image=stud_image).place(x=0,y=0)
+stud_image_label=Label(image_frame,image=photo2)
+stud_image_label.place(x=0,y=0)
 
+upload_button=Button(root,text="Clear",bg="gold",fg="white",activebackground="gold",activeforeground="white",font="cambria 12",width=10,relief="groove")
+upload_button.place(x=760,y=233)
+upload_button.config(command=clear)
 
-
-root.mainloop()
+upload_button=Button(root,text="Upload Image",bg="salmon",fg="white",activebackground="white",activeforeground="salmon",font="cambria 12",width=10,relief="groove")
+upload_button.place(x=650,y=233)
+upload_button.config(command=showimage)
+root.mainloop() 
