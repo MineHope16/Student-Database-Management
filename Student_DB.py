@@ -8,6 +8,7 @@ import random
 import regex as re
 import datetime as date
 from PIL import Image,ImageTk
+from datetime import *
 
 DATABASE_file="student.db"
 TABLE_NAME="students"
@@ -231,25 +232,24 @@ def student_window4():
 def student_window3():    
     #for Institute
 
-    def ind_notify():
+    def ind_notify(roll_no,e_mail):
         def fetch_emails():
             # Connect to your SQLite database
             conn = sqlite3.connect(DATABASE_file)
             cursor = conn.cursor()
 
             # Fetch emails from the "notification" table
-            cursor.execute(f"SELECT email FROM {TABLE_NAME}")
+            cursor.execute(f"SELECT email FROM {TABLE_NAME} where rollno={roll_no}")
             emails = cursor.fetchall()
 
             # Close the connection
             conn.close()
 
             # Extract emails from the result
-            emails_list = ["Select User"]  # Adding "Select User" as the default option
+            emails_list = ["Select Student"]  # Adding "Select User" as the default option
             emails_list.extend([email[0] for email in emails])
 
             return emails_list
-
 
         def send_notification():
             
@@ -262,8 +262,8 @@ def student_window3():
                 # SMTP Configuration
                 smtp_server = "smtp.gmail.com"
                 smtp_port = 587  # TLS Port
-                smtp_username = "shubhuu5171@gmail.com"  # Update with your email
-                smtp_password = "gzstnwbzcfevtjea"  # Update with your password
+                smtp_username = "minehope16@gmail.com"  # Update with your email
+                smtp_password = "lhtjdviuanqumahw"  # Update with your password
 
                 # Create SMTP connection
                 with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -272,7 +272,7 @@ def student_window3():
 
                     # Construct and send the email
                     email_message = f"Subject: {notification_subject}\n\n"
-                    email_message += f"Dear Employee,\n\n{notification_message}\n\nBest Regards,\nShubham Navale\n(CEO)"
+                    email_message += f"Dear Student,\n\n{notification_message}\n\nBest Regards,\nThe Students"
                     server.sendmail(smtp_username, selected_email_value, email_message)
 
                 
@@ -281,10 +281,16 @@ def student_window3():
                 connection = sqlite3.connect(DATABASE_file)
                 cur_db = connection.cursor()
                 
-                notification_msg = f"{notification_message} - Shubham Navale (CEO)"  # Appending additional information
+                notification_msg = f"{notification_message}"  # Appending additional information
+
+                # Get the current date and time
+                current_date_time = datetime.now()
+
+                # Format the date as a string compatible with SQLite's date format
+                formatted_date = current_date_time.strftime("%Y-%m-%d")
                 
                 # Using parameterized queries to prevent SQL injection attacks
-                cur_db.execute(f"UPDATE {TABLE_NAME} SET notifi=? WHERE email=?", (notification_msg, selected_email_value))
+                cur_db.execute(f"INSERT INTO {e_mail.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
                 
                 
                 connection.commit()
@@ -297,9 +303,8 @@ def student_window3():
             finally:
                 connection.close()
 
-                
         win1 = Tk()
-        win1.title("Notifier")
+        win1.title("Notification Window")
         win1.config(bg="MediumPurple1")
 
         screen_width = win1.winfo_screenwidth()
@@ -312,8 +317,17 @@ def student_window3():
         win1.maxsize(500, 400)
 
         # Label for the Title
-        l1 = Label(win1, text=" Notifier ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
-        l1.pack(pady=20)
+        l1 = Label(win1, text=" Notification Window ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
+        l1.pack(pady=20,fill=X)
+
+        # Load an image file
+        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image=back_arrow_image.subsample(15,15)
+        # Keep a reference of the photo image
+        win1.back_arrow_image = back_arrow_image
+        # Create an image button with the correct reference
+        button = Button(win1, image=win1.back_arrow_image, bg="MediumPurple1", borderwidth=0, relief='flat', activebackground="MediumPurple1", command=lambda: [win1.destroy(), student_window3()])
+        button.place(x=8, y=12)
 
         # Dropdown list for emails
         emails = fetch_emails()
@@ -345,12 +359,127 @@ def student_window3():
 
         win1.mainloop()
 
-
     def mass_notify():
-        pass
+        def fetch_emails():
+            # Connect to your SQLite database
+            conn = sqlite3.connect(DATABASE_file)
+            cursor = conn.cursor()
 
+            # Fetch emails from the "notification" table
+            cursor.execute(f"SELECT email FROM {TABLE_NAME}")
+            emails = cursor.fetchall()
 
-    def notifi():
+            # Close the connection
+            conn.close()
+
+            # Extract emails from the result
+            emails_list = []  # Adding "Select User" as the default option
+            emails_list.extend([email[0] for email in emails])
+
+            return emails_list
+
+        def send_notification():
+            
+            try:
+                selected_email_value = selected_email.get()
+                if selected_email_value=="Select User":
+                    raise ValueError("Please select the email")
+                notification_subject = "The Students Notification"  # Get the subject from the entry field
+                notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
+                # SMTP Configuration
+                smtp_server = "smtp.gmail.com"
+                smtp_port = 587  # TLS Port
+                smtp_username = "minehope16@gmail.com"  # Update with your email
+                smtp_password = "lhtjdviuanqumahw"  # Update with your password
+
+                # Create SMTP connection
+                with smtplib.SMTP(smtp_server, smtp_port) as server:
+                    server.starttls()
+                    server.login(smtp_username, smtp_password)
+
+                    # Construct and send the email
+                    email_message = f"Subject: {notification_subject}\n\n"
+                    email_message += f"Dear Student,\n\n{notification_message}\n\nBest Regards,\nThe Students"
+                    server.sendmail(smtp_username, selected_email_value, email_message)
+
+                
+                                    
+                
+                connection = sqlite3.connect(DATABASE_file)
+                cur_db = connection.cursor()
+                
+                notification_msg = f"{notification_message}"  # Appending additional information
+
+                # Get the current date and time
+                current_date_time = datetime.now()
+
+                # Format the date as a string compatible with SQLite's date format
+                formatted_date = current_date_time.strftime("%Y-%m-%d")
+                
+                # Using parameterized queries to prevent SQL injection attacks
+                cur_db.execute(f"INSERT INTO {e_mail.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
+                
+                
+                connection.commit()
+                msg.showinfo("Email sent successfully",f"The email has sent to {selected_email_value} successfully.")
+
+            except Exception as e:
+                msg.showerror("Error has occured !",e)
+                print(e)
+
+            finally:
+                connection.close()
+
+        win1 = Tk()
+        win1.title("Notification Window")
+        win1.config(bg="MediumPurple1")
+
+        screen_width = win1.winfo_screenwidth()
+        screen_height = win1.winfo_screenheight()
+        x_dim = (screen_width - 500) // 2
+        y_dim = (screen_height - 400) // 2
+
+        win1.geometry(f"500x400+{x_dim}+{y_dim}")
+        win1.minsize(500, 400)
+        win1.maxsize(500, 400)
+
+        # Label for the Title
+        l1 = Label(win1, text=" Notification Window ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
+        l1.pack(pady=20,fill=X)
+
+        # Load an image file
+        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image=back_arrow_image.subsample(15,15)
+        # Keep a reference of the photo image
+        win1.back_arrow_image = back_arrow_image
+        # Create an image button with the correct reference
+        button = Button(win1, image=win1.back_arrow_image, bg="MediumPurple1", borderwidth=0, relief='flat', activebackground="MediumPurple1", command=lambda: [win1.destroy(), student_window3()])
+        button.place(x=8, y=12)        
+
+        info_label=Label(win1,text="Type the message you want to send",font="arial 10 bold",fg="Black",bg="MediumPurple1")
+        info_label.pack(pady=10)
+
+        def on_click(event):
+            notification_text.delete("1.0", "end-1c")
+            notification_text.config(fg="Black")         
+
+        # Text box for notification message
+        notification_text = Text(win1, height=8, width=60, fg="Grey",wrap="word")
+        notification_text.insert("1.0", "Type Here...")
+        notification_text.bind("<FocusIn>", on_click)
+        notification_text.pack(pady=10)
+
+        # Send Notification Button
+        b2 = Button(win1, text="Send Notification", relief="groove", font=("arial", 10, "bold"), bg="Salmon", width=30, command=send_notification)
+        b2.pack(pady=10)
+
+        # Blank Label
+        lblank1 = Label(win1, bg="MediumPurple1")
+        lblank1.pack()
+
+        win1.mainloop()
+
+    def notifi(roll_no,e_mail):
         #Creating the application window ( " The Students " )
         win1=Tk()
         win1.title("The Students")
@@ -364,15 +493,6 @@ def student_window3():
         win1.geometry(f"500x280+{x_dim}+{y_dim}")
         win1.minsize(500,280)
         win1.maxsize(500,280)
-        
-        # Load an image file
-        back_arrow_image = PhotoImage(file="BackArrow.png")
-        back_arrow_image=back_arrow_image.subsample(15,15)
-        # Keep a reference of the photo image
-        win1.back_arrow_image = back_arrow_image
-        # Create an image button with the correct reference
-        button = Button(win1, image=win1.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), app_window1()])
-        button.place(x=10, y=10)
 
         
         #To destroy the window
@@ -406,7 +526,7 @@ def student_window3():
         #Register Button
         b1=Button(win1,text="Individual Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="DarkOliveGreen1")
         b1.pack(pady=10)
-        b1.config(command=lambda:[destry(),ind_notify()])
+        b1.config(command=lambda:[destry(),ind_notify(roll_no,e_mail)])
 
         #Login Button
         b2=Button(win1,text="Mass Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="Maroon1")
@@ -473,6 +593,7 @@ def student_window3():
             photo2=ImageTk.PhotoImage(resized_image)
             stud_image_label.config(image=photo2)
             stud_image_label.image=photo2
+            search.set("")
                     
         
         except FileNotFoundError as v:
@@ -481,18 +602,34 @@ def student_window3():
             photo2=ImageTk.PhotoImage(resized_image)
             stud_image_label.config(image=photo2)
             stud_image_label.image=photo2
+            search.set("")
 
         except TclError as t:
             msg.showerror("Wrong Input","Please search the valid Roll No only")
             print(t)
+            search.set("")
 
         
         except TypeError as t:
             msg.showerror("Invalid Roll No","You have entered the wrong Roll No")
+            search.set("")
 
         except Exception as e:
             msg.showerror("Error has occured","Search only the valid \"Roll No\" of the student")
-            print(e)  
+            print(e)
+            search.set("")  
+
+    def check_pass(roll_no,e_mail):
+        
+        if roll_no=="" and e_mail=="":            
+            a=msg.showerror("Wrong Input","Please select the student")
+            print(a)
+            if a=="ok":
+                student_window3()
+            
+        else:
+            notifi(roll_no,e_mail)
+
 
     
     back_ground="LightBlue"
@@ -576,7 +713,7 @@ def student_window3():
 
     update_image=PhotoImage(file="bell.png")
     update_image=update_image.subsample(15,15)
-    update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=lambda:[root.destroy(),notifi()]).place(x=790,y=230)
+    update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=lambda:[root.destroy(),check_pass(roll_no_var.get(),email_var.get())]).place(x=790,y=230)
 
 
     #Image Frame
@@ -1625,4 +1762,4 @@ def app_window1():
     win1.mainloop()
 
 #MAIN EXECUTION
-student_window3()
+app_window1()
