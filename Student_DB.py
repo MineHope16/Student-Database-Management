@@ -72,6 +72,7 @@ def is_table_exists(table_name):
 
 
 def student_window4():
+    #for Student
     def showimage():
         global filename
         global img
@@ -204,11 +205,10 @@ def student_window4():
 
     address_label=Label(frame,text="Address",bg=back_ground,fg="Black",font="cambria 14").place(x=20,y=222)
     aadhaar_label_entry=Entry(frame,textvariable=address_var,width=50,font="cambria 12",state="readonly").place(x=170,y=222)
-
+ 
     update_image=PhotoImage(file="bell.png")
     update_image=update_image.subsample(15,15)
     update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=790,y=230)
-
 
     #Image Frame
     image_frame=Frame(root,bd=3,bg=back_ground,width=150,height=170,relief="groove")
@@ -229,7 +229,77 @@ def student_window4():
 
 
 def student_window3():    
-    
+    #for Institute
+
+    def notifi():
+        #Creating the application window ( " The Students " )
+        win1=Tk()
+        win1.title("The Students")
+        win1.config(bg="LightBlue")
+
+        screen_width = win1.winfo_screenwidth()
+        screen_height = win1.winfo_screenheight()
+        x_dim=(screen_width-500)//2
+        y_dim=(screen_height-350)//2
+        
+        win1.geometry(f"500x280+{x_dim}+{y_dim}")
+        win1.minsize(500,280)
+        win1.maxsize(500,280)
+        
+        # Load an image file
+        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image=back_arrow_image.subsample(15,15)
+        # Keep a reference of the photo image
+        win1.back_arrow_image = back_arrow_image
+        # Create an image button with the correct reference
+        button = Button(win1, image=win1.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), app_window1()])
+        button.place(x=10, y=10)
+
+        
+        #To destroy the window
+        def destry():
+            win1.destroy()
+
+        #Label for the Title
+        l1=Label(win1,text=" THE STUDENTS ",font=("Times",30,"bold"),bg="LightBlue",fg="grey",relief="ridge")
+        l1.pack(pady=5)
+        #Blank Label
+        lblank1=Label(win1, bg="LightBlue")
+        lblank1.pack()
+
+        # Load an image file
+        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image=back_arrow_image.subsample(15,15)
+        # Keep a reference of the photo image
+        win1.back_arrow_image = back_arrow_image
+        # Create an image button with the correct reference
+        button = Button(win1, image=win1.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), student_window3()])
+        button.place(x=8, y=8)
+
+        update_image1=PhotoImage(file="bell.png")
+        update_image1=update_image1.subsample(3,3)
+        update_button=Button(win1,image=update_image1,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=300,y=80)
+
+        update_image11=PhotoImage(file="bell.png")
+        update_image11=update_image11.subsample(3,3)
+        update_button=Button(win1,image=update_image11,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=30,y=80)
+
+        #Register Button
+        b1=Button(win1,text="Individual Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="DarkOliveGreen1")
+        b1.pack(pady=10)
+        b1.config(command=lambda:[destry(),register_window()])
+
+        #Login Button
+        b2=Button(win1,text="Mass Notify",relief="groove",font=("arial",13,"bold"),width=20,height=2,bg="Maroon1")
+        b2.pack(pady=10)
+        b2.config(command=lambda:[destry(),login_window()])
+
+        #Blank Label
+        lblank1=Label(win1, bg="LightBlue")
+        lblank1.pack()
+
+        win1.mainloop()
+
     def logO():
         a=msg.askyesno("Logout","Do you want to logout ?")
         if a==True:
@@ -386,7 +456,7 @@ def student_window3():
 
     update_image=PhotoImage(file="bell.png")
     update_image=update_image.subsample(15,15)
-    update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=790,y=230)
+    update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=lambda:[root.destroy(),notifi()]).place(x=790,y=230)
 
 
     #Image Frame
@@ -1435,4 +1505,4 @@ def app_window1():
     win1.mainloop()
 
 #MAIN EXECUTION
-app_window1()
+student_window3()
