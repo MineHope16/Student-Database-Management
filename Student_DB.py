@@ -381,47 +381,41 @@ def student_window3():
         def send_notification():
             
             try:
-                selected_email_value = selected_email.get()
-                if selected_email_value=="Select User":
-                    raise ValueError("Please select the email")
-                notification_subject = "The Students Notification"  # Get the subject from the entry field
-                notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
-                # SMTP Configuration
-                smtp_server = "smtp.gmail.com"
-                smtp_port = 587  # TLS Port
-                smtp_username = "minehope16@gmail.com"  # Update with your email
-                smtp_password = "lhtjdviuanqumahw"  # Update with your password
+                a=fetch_emails()
+                print(a)                
+                for selected_email_value in a:
+                    notification_subject = "The Students Notification"  # Get the subject from the entry field
+                    notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
+                    # SMTP Configuration
+                    smtp_server = "smtp.gmail.com"
+                    smtp_port = 587  # TLS Port
+                    smtp_username = "minehope16@gmail.com"  # Update with your email
+                    smtp_password = "lhtjdviuanqumahw"  # Update with your password
 
-                # Create SMTP connection
-                with smtplib.SMTP(smtp_server, smtp_port) as server:
-                    server.starttls()
-                    server.login(smtp_username, smtp_password)
+                    # Create SMTP connection
+                    with smtplib.SMTP(smtp_server, smtp_port) as server:
+                        server.starttls()
+                        server.login(smtp_username, smtp_password)
 
-                    # Construct and send the email
-                    email_message = f"Subject: {notification_subject}\n\n"
-                    email_message += f"Dear Student,\n\n{notification_message}\n\nBest Regards,\nThe Students"
-                    server.sendmail(smtp_username, selected_email_value, email_message)
+                        # Construct and send the email
+                        email_message = f"Subject: {notification_subject}\n\n"
+                        email_message += f"Dear Student,\n\n{notification_message}\n\nBest Regards,\nThe Students"
+                        server.sendmail(smtp_username, selected_email_value, email_message)
 
-                
+                    connection = sqlite3.connect(DATABASE_file)
+                    cur_db = connection.cursor()
+                    
+                    notification_msg = f"{notification_message}"  # Appending additional information
+                    # Get the current date and time
+                    current_date_time = datetime.now()
+                    # Format the date as a string compatible with SQLite's date format
+                    formatted_date = current_date_time.strftime("%Y-%m-%d")
+                    
+                    # Using parameterized queries to prevent SQL injection attacks
+                    cur_db.execute(f"INSERT INTO {selected_email_value.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
                                     
-                
-                connection = sqlite3.connect(DATABASE_file)
-                cur_db = connection.cursor()
-                
-                notification_msg = f"{notification_message}"  # Appending additional information
-
-                # Get the current date and time
-                current_date_time = datetime.now()
-
-                # Format the date as a string compatible with SQLite's date format
-                formatted_date = current_date_time.strftime("%Y-%m-%d")
-                
-                # Using parameterized queries to prevent SQL injection attacks
-                cur_db.execute(f"INSERT INTO {e_mail.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
-                
-                
-                connection.commit()
-                msg.showinfo("Email sent successfully",f"The email has sent to {selected_email_value} successfully.")
+                    connection.commit()
+                msg.showinfo("Email sent successfully",f"The email has sent successfully to all the students.")
 
             except Exception as e:
                 msg.showerror("Error has occured !",e)
@@ -446,6 +440,8 @@ def student_window3():
         # Label for the Title
         l1 = Label(win1, text=" Notification Window ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
         l1.pack(pady=20,fill=X)
+        l1 = Label(win1, text=" Mass Notification ", font=("Times", 24, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
+        l1.pack(pady=5,)
 
         # Load an image file
         back_arrow_image = PhotoImage(file="BackArrow.png")
@@ -454,7 +450,7 @@ def student_window3():
         win1.back_arrow_image = back_arrow_image
         # Create an image button with the correct reference
         button = Button(win1, image=win1.back_arrow_image, bg="MediumPurple1", borderwidth=0, relief='flat', activebackground="MediumPurple1", command=lambda: [win1.destroy(), student_window3()])
-        button.place(x=8, y=12)        
+        button.place(x=8, y=15)        
 
         info_label=Label(win1,text="Type the message you want to send",font="arial 10 bold",fg="Black",bg="MediumPurple1")
         info_label.pack(pady=10)
