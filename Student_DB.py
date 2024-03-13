@@ -89,7 +89,6 @@ def student_window4():
         filename="Student Images/"+str(reg_var.get())+".png"
         img.save("Student Images/"+str(reg_var.get())+".png")
 
-
     def search_stud():
         a="" #To store the fetched data
         try:
@@ -135,7 +134,7 @@ def student_window4():
 
         except Exception as e:
             msg.showerror("Error has occured","Search only the valid \"Roll No\" of the student")
-            print(e)  
+            print(e)     
 
     back_ground="LightBlue"
 
@@ -207,10 +206,6 @@ def student_window4():
     address_label=Label(frame,text="Address",bg=back_ground,fg="Black",font="cambria 14").place(x=20,y=222)
     aadhaar_label_entry=Entry(frame,textvariable=address_var,width=50,font="cambria 12",state="readonly").place(x=170,y=222)
  
-    update_image=PhotoImage(file="bell.png")
-    update_image=update_image.subsample(15,15)
-    update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=790,y=230)
-
     #Image Frame
     image_frame=Frame(root,bd=3,bg=back_ground,width=150,height=170,relief="groove")
     image_frame.place(x=20,y=80)
@@ -231,7 +226,6 @@ def student_window4():
 
 def student_window3():    
     #for Institute
-
     def ind_notify(roll_no,e_mail):
         def fetch_emails():
             # Connect to your SQLite database
@@ -246,7 +240,7 @@ def student_window3():
             conn.close()
 
             # Extract emails from the result
-            emails_list = ["Select Student"]  # Adding "Select User" as the default option
+            emails_list = []  # Adding "Select User" as the default option
             emails_list.extend([email[0] for email in emails])
 
             return emails_list
@@ -255,9 +249,9 @@ def student_window3():
             
             try:
                 selected_email_value = selected_email.get()
-                if selected_email_value=="Select User":
-                    raise ValueError("Please select the email")
-                notification_subject = "The Students Notification"  # Get the subject from the entry field
+                title_text_value=title_text.get("1.0", "end-1c")                          
+                notification_subject = "The Students Notification - " + title_text_value
+                # Get the subject from the entry field
                 notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
                 # SMTP Configuration
                 smtp_server = "smtp.gmail.com"
@@ -290,15 +284,23 @@ def student_window3():
                 formatted_date = current_date_time.strftime("%Y-%m-%d")
                 
                 # Using parameterized queries to prevent SQL injection attacks
-                cur_db.execute(f"INSERT INTO {e_mail.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
-                
-                
+                cur_db.execute(f"INSERT INTO {e_mail.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,title_text_value,notification_msg))
+                                
                 connection.commit()
                 msg.showinfo("Email sent successfully",f"The email has sent to {selected_email_value} successfully.")
+                notification_text.delete("1.0", "end-1c")
+                notification_text.insert("1.0"," Type Message Here...")
+                notification_text.config(fg="Grey")
+                title_text.delete("1.0", "end-1c")
+                title_text.insert("1.0"," Type Title Here...")
+                title_text.config(fg="Grey")
 
             except Exception as e:
                 msg.showerror("Error has occured !",e)
                 print(e)
+
+            except ValueError as v:
+                msg.showerror("Wrong Input",v)
 
             finally:
                 connection.close()
@@ -309,12 +311,12 @@ def student_window3():
 
         screen_width = win1.winfo_screenwidth()
         screen_height = win1.winfo_screenheight()
-        x_dim = (screen_width - 500) // 2
-        y_dim = (screen_height - 400) // 2
+        x_dim = (screen_width - 550) // 2
+        y_dim = (screen_height - 450) // 2
 
         win1.geometry(f"500x400+{x_dim}+{y_dim}")
-        win1.minsize(500, 400)
-        win1.maxsize(500, 400)
+        win1.minsize(500, 450)
+        win1.maxsize(500, 450)
 
         # Label for the Title
         l1 = Label(win1, text=" Notification Window ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
@@ -327,7 +329,7 @@ def student_window3():
         win1.back_arrow_image = back_arrow_image
         # Create an image button with the correct reference
         button = Button(win1, image=win1.back_arrow_image, bg="MediumPurple1", borderwidth=0, relief='flat', activebackground="MediumPurple1", command=lambda: [win1.destroy(), student_window3()])
-        button.place(x=8, y=12)
+        button.place(x=8, y=22)
 
         # Dropdown list for emails
         emails = fetch_emails()
@@ -336,21 +338,40 @@ def student_window3():
         email_dropdown = OptionMenu(win1, selected_email, *emails)
         email_dropdown.pack(pady=10)
 
-        info_label=Label(win1,text="Type the message you want to send",font="arial 10 bold",fg="Black",bg="MediumPurple1")
+        info_label=Label(win1,text="Type the title and message you want to send",font="cambria 12 bold",fg="Black",bg="MediumPurple1")
         info_label.pack(pady=10)
 
-        def on_click(event):
+        def on_click1(event):
             notification_text.delete("1.0", "end-1c")
-            notification_text.config(fg="Black")         
+            notification_text.config(fg="Black")
+
+        def on_click2(event):
+            title_text.delete("1.0", "end-1c")
+            title_text.config(fg="Black")         
+
+        # Text box for title message
+        title_text = Text(win1, height=1, width=50, fg="Grey",wrap="word")
+        title_text.insert("1.0", "Type Title Here...")
+        title_text.bind("<FocusIn>", on_click2)
+        title_text.pack(padx=10,pady=10)
 
         # Text box for notification message
         notification_text = Text(win1, height=8, width=60, fg="Grey",wrap="word")
-        notification_text.insert("1.0", "Type Here...")
-        notification_text.bind("<FocusIn>", on_click)
+        notification_text.insert("1.0", "Type Message Here...")
+        notification_text.bind("<FocusIn>", on_click1)
         notification_text.pack(pady=10)
 
+        def check_pass_notifi():
+            if roll_no_var!="":
+                send_notification()
+            else:
+                a=msg.showerror("Wrong Input","Please search the student first")
+                print(a)
+                if a=="ok":
+                    student_window3()
+
         # Send Notification Button
-        b2 = Button(win1, text="Send Notification", relief="groove", font=("arial", 10, "bold"), bg="Salmon", width=30, command=send_notification)
+        b2 = Button(win1, text="Send Notification", relief="groove", font=("arial", 10, "bold"), bg="Salmon", width=30, command=lambda:[check_pass_notifi()])
         b2.pack(pady=10)
 
         # Blank Label
@@ -381,16 +402,22 @@ def student_window3():
         def send_notification():
             
             try:
-                a=fetch_emails()
-                print(a)                
-                for selected_email_value in a:
-                    notification_subject = "The Students Notification"  # Get the subject from the entry field
+                emails = fetch_emails()
+                total_students = len(emails)
+                i=1
+                print(emails)                
+                for selected_email_value in emails:
+                    # Message box with progress indicator
+                    progress_message = f"Sending email to student {i}/{total_students}: {selected_email_value}\nPlease wait..."
+                    info_label.config(text=progress_message)
+                    title_text_value=title_text.get("1.0","end-1c")
+                    notification_subject = "The Students Notification" + title_text_value # Get the subject from the entry field
                     notification_message = notification_text.get("1.0", "end-1c")  # Get the text from the text box
                     # SMTP Configuration
                     smtp_server = "smtp.gmail.com"
                     smtp_port = 587  # TLS Port
                     smtp_username = "minehope16@gmail.com"  # Update with your email
-                    smtp_password = "lhtjdviuanqumahw"  # Update with your password
+                    smtp_password = "lhtjdviuanqumahw"  # Update with your password                    
 
                     # Create SMTP connection
                     with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -412,10 +439,16 @@ def student_window3():
                     formatted_date = current_date_time.strftime("%Y-%m-%d")
                     
                     # Using parameterized queries to prevent SQL injection attacks
-                    cur_db.execute(f"INSERT INTO {selected_email_value.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,notification_msg, selected_email_value))
-                                    
+                    cur_db.execute(f"INSERT INTO {selected_email_value.split("@")[0]} (date,title,notifi) VALUES (?,?,?)", (formatted_date,title_text_value,notification_msg))
                     connection.commit()
+                    i+=1
                 msg.showinfo("Email sent successfully",f"The email has sent successfully to all the students.")
+                info_label.config(text="Type the message you want to send")
+                notification_text.delete("1.0","end-1c")
+                title_text.delete("1.0","end-1c")
+                notification_text.insert("1.0","Type Message Here...")
+                title_text.insert("1.0","Type Title Here...")
+
 
             except Exception as e:
                 msg.showerror("Error has occured !",e)
@@ -431,17 +464,17 @@ def student_window3():
         screen_width = win1.winfo_screenwidth()
         screen_height = win1.winfo_screenheight()
         x_dim = (screen_width - 500) // 2
-        y_dim = (screen_height - 400) // 2
+        y_dim = (screen_height - 450) // 2
 
-        win1.geometry(f"500x400+{x_dim}+{y_dim}")
-        win1.minsize(500, 400)
-        win1.maxsize(500, 400)
+        win1.geometry(f"500x450+{x_dim}+{y_dim}")
+        win1.minsize(500, 450)
+        win1.maxsize(500, 450)
 
         # Label for the Title
         l1 = Label(win1, text=" Notification Window ", font=("Times", 30, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
         l1.pack(pady=20,fill=X)
         l1 = Label(win1, text=" Mass Notification ", font=("Times", 24, "bold"), bg="MediumPurple1", fg="white", relief="ridge")
-        l1.pack(pady=5,)
+        l1.pack(pady=5)
 
         # Load an image file
         back_arrow_image = PhotoImage(file="BackArrow.png")
@@ -450,11 +483,21 @@ def student_window3():
         win1.back_arrow_image = back_arrow_image
         # Create an image button with the correct reference
         button = Button(win1, image=win1.back_arrow_image, bg="MediumPurple1", borderwidth=0, relief='flat', activebackground="MediumPurple1", command=lambda: [win1.destroy(), student_window3()])
-        button.place(x=8, y=15)        
+        button.place(x=8, y=24)        
 
-        info_label=Label(win1,text="Type the message you want to send",font="arial 10 bold",fg="Black",bg="MediumPurple1")
+        info_label=Label(win1,text="Type the message you want to send",font="cambria 12 bold",fg="Black",bg="MediumPurple1")
         info_label.pack(pady=10)
 
+        def on_click1(event):
+            title_text.delete("1.0", "end-1c")
+            title_text.config(fg="Black")         
+
+        # Text box for title message
+        title_text = Text(win1, height=1, width=50, fg="Grey",wrap="word")
+        title_text.insert("1.0", "Type Title Here...")
+        title_text.bind("<FocusIn>", on_click1)
+        title_text.pack(pady=10)
+        
         def on_click(event):
             notification_text.delete("1.0", "end-1c")
             notification_text.config(fg="Black")         
@@ -740,6 +783,51 @@ def student_window2():
             win1.destroy()
             app_window2()
 
+    def show_notification():
+        try:
+            con = sqlite3.connect(DATABASE_file)
+            cur_db = con.cursor()
+            cur_db.execute(f"SELECT date, title, notifi FROM {USER_TABLE}")
+            notifications = cur_db.fetchall()
+            con.close()
+
+            if not notifications:
+                msg.showinfo("No Notifications", "You have no notifications.")
+                return
+
+            notification_window = Toplevel(win1)
+            notification_window.title(" My Notifications ")
+            notification_window.geometry("400x300")
+            notification_window.config(bg="LightBlue")
+
+            label_title = Label(notification_window, text="Notifications", font=("Cambria", 24, "bold"), bg="LightBlue", relief="groove",fg="Black")
+            label_title.pack(pady=10,fill=X)
+
+            # Create a text widget for displaying notifications
+            text_widget = Text(notification_window, wrap="word", font=("Arial", 12),bg="LightBlue")
+            text_widget.pack(expand=True, fill="both", padx=10, pady=10)
+
+            # Create a vertical scrollbar
+            scrollbar = Scrollbar(notification_window, command=text_widget.yview)
+            scrollbar.pack(side="right", fill="y")
+
+            # Configure the text widget to use the scrollbar
+            text_widget.config(yscrollcommand=scrollbar.set)
+
+            for notification in notifications:
+                text_widget.insert("end", f"Date: {notification[0]}\n", ("normal",))
+                text_widget.insert("end", f"Title: {notification[1]}\n\n", ("bold",))
+                text_widget.insert("end", f"Notification: {notification[2]}\n\n", ("normal",))
+                text_widget.insert("end", "-" * 60 + "\n\n", ("normal",))
+
+            # Apply tag configurations
+            text_widget.tag_configure("bold", font=("Arial", 12, "bold"))
+            text_widget.tag_configure("normal", font=("Arial", 12))
+
+        except Exception as e:
+            msg.showerror("Error", f"An error occurred: {e}")
+            print(e)
+        
     #Delete Function
     def stud_delete():
         con=sqlite3.connect(DATABASE_file)
@@ -830,6 +918,7 @@ def student_window2():
 
     My_notification = Button(win1, bg="LightBlue", image=photo2, text="My Notification", compound=TOP ,borderwidth=0, activebackground="LightBlue",font="cambria 12")
     My_notification.place(x=320, y=150)
+    My_notification.config(command=show_notification)
 
     profile_edit = Button(win1, bg="LightBlue", image=photo3, text="Edit Profile", compound=TOP ,borderwidth=0, activebackground="LightBlue",font="cambria 12")
     profile_edit.place(x=80, y=150)
