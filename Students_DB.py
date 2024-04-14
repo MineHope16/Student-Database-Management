@@ -1,3 +1,5 @@
+#The Student's Notifier
+
 from tkinter import * 
 import os
 from tkinter import filedialog
@@ -10,13 +12,14 @@ import datetime as date
 from PIL import Image,ImageTk
 from datetime import *
 
+#Global Variables
 DATABASE_file="student.db"
 TABLE_NAME="students"
 USER_TABLE=""
 filename=""
 img=""
 
-#To create a table The_Student
+#To create a table students
 con=sqlite3.connect(DATABASE_file)
 cur_db=con.cursor()
 # Create counter table
@@ -1117,16 +1120,6 @@ def student_window1():
     b1 = Button(root, text="Update", relief="groove", font=font_style, height=1, width=10, bg="#4CAF50", fg="white")  # Updated colors and width
     b1.place(anchor=CENTER, x=310, y=620)
     b1.config(command=stud_update)
-
-    # # Creating a button to Delete
-    # b2 = Button(root, text="Delete", relief="groove", font=font_style, height=1, width=10, bg="#FF4C4C", fg="white")  # Updated colors and width
-    # b2.place(anchor=CENTER, x=170, y=670)
-    # b2.config(command=stud_delete)
-
-    # # Creating a button to back
-    # b3 = Button(root, text="Logout", relief="groove", font=font_style, width=10, height=1, bg="#FFD700", fg="black")  # Updated colors and width
-    # b3.place(anchor=CENTER, x=310, y=670)
-    # b3.config(command=logO)
 
     # Creating a button to Feedback
     b4 = Button(root, text="Feedback", relief="groove", font=font_style, width=10, height=1, bg="#1E90FF", fg="white")  # Updated colors and width
