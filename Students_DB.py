@@ -31,6 +31,7 @@ cur_db.execute("""
     );
 """)
 
+
 # Check if the counter table has any records
 cur_db.execute("SELECT COUNT(*) FROM counter")
 count = cur_db.fetchone()[0]
