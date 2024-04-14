@@ -12,14 +12,16 @@ import datetime as date
 from PIL import Image,ImageTk
 from datetime import *
 
-#Global Variables
+
+# Global Variables
 DATABASE_file="student.db"
 TABLE_NAME="students"
 USER_TABLE=""
 filename=""
 img=""
 
-#To create a table students
+
+# Creating the initial Datbase Tables
 con=sqlite3.connect(DATABASE_file)
 cur_db=con.cursor()
 # Create counter table
@@ -28,6 +30,7 @@ cur_db.execute("""
         next_rollno INTEGER
     );
 """)
+
 # Check if the counter table has any records
 cur_db.execute("SELECT COUNT(*) FROM counter")
 count = cur_db.fetchone()[0]
@@ -60,21 +63,22 @@ def is_table_exists(table_name):
     conn = sqlite3.connect(DATABASE_file)
     
     # Create a cursor object to execute SQL queries
-    cursor = conn.cursor()
-    
+    cursor = conn.cursor()    
+
     # Execute a query to check if the table exists
-    cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';")
-    
+    cursor.execute(f"SELECT name FROM sqlite_master WHERE type='table' AND name='{table_name}';")    
+
     # Fetch the result
-    result = cursor.fetchone()
-    
+    result = cursor.fetchone()    
+
     # Close the connection
     conn.close()
     
     # If the result is not None, the table exists
     return result is not None
 
-
+# Dashboard Functions
+# Student's Dashboard
 def student_window4():
     #for Student
     def showimage():
@@ -226,7 +230,7 @@ def student_window4():
     search_stud()
     root.mainloop()
 
-
+# Institutes Dashboard
 def student_window3():    
     #for Institute
     def ind_notify(roll_no,e_mail):
@@ -776,7 +780,7 @@ def student_window3():
     
     root.mainloop() 
 
-
+# Student's My Notification Window
 def student_window2():
 
     #Logout Funtion
@@ -933,7 +937,7 @@ def student_window2():
     l2.pack(side=BOTTOM)
     win1.mainloop()
 
-
+# Edit Profile Window
 def student_window1():
     #Feedback Button Funtion
     def feedback():
@@ -1150,7 +1154,7 @@ def student_window1():
     
     root.mainloop()
 
-
+# Student's Login Window
 def login_window():
 
     def chck_pass():
@@ -1271,6 +1275,9 @@ def login_window():
     rootk.mainloop()
 
 
+
+
+# Student's Register Window
 def register_window():
     root=Tk()
     root.title("The Students")
@@ -1636,7 +1643,7 @@ def register_window():
     # Start the Tkinter main loop
     root.mainloop()
 
-
+# Institute's Login Window
 def ins_login():
     def chck_pass():
         # Set focus to a different widget to hide the cursor
@@ -1723,7 +1730,7 @@ def ins_login():
     
     rootk.mainloop()
 
-
+# Student's Window
 def app_window2():
     #Creating the application window ( " The Students " )
     win1=Tk()
@@ -1788,7 +1795,7 @@ def app_window2():
 
     win1.mainloop()
 
-    
+# Main Application Dashboard    
 def app_window1():
     #Creating the application window ( " The Students " )
     win1=Tk()
@@ -1838,6 +1845,9 @@ def app_window1():
     l2=Label(win1,text="designed by DATTARAM KOLTE",font=("calibri",8,"bold"),bg="LightBlue")
     l2.pack(side=BOTTOM)
     win1.mainloop()
+
+
+
 
 #MAIN EXECUTION
 app_window1()
