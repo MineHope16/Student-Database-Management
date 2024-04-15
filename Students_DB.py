@@ -21,6 +21,7 @@ filename=""
 img=""
 
 
+
 # Creating the initial Datbase Tables
 con=sqlite3.connect(DATABASE_file)
 cur_db=con.cursor()
@@ -126,7 +127,7 @@ def student_window4():
                     
         
         except FileNotFoundError as v:
-            img=(Image.open("image.png"))
+            img=(Image.open("Program PNG's\image.png"))
             resized_image=img.resize((150,170))
             photo2=ImageTk.PhotoImage(resized_image)
             stud_image_label.config(image=photo2)
@@ -164,7 +165,7 @@ def student_window4():
     l1=Label(root,text=" THE STUDENTS ",font=("Times",30,"bold"),bg="LightBlue",fg="Black",relief="ridge")
     l1.pack(pady=20,fill=X)
     
-    back_arrow=PhotoImage(file="BackArrow.png")
+    back_arrow=PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow=back_arrow.subsample(15,15)
     back_arrow_button=Button(root,image=back_arrow,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=lambda:[root.destroy(),student_window2()]).place(x=10,y=25)
 
@@ -218,10 +219,10 @@ def student_window4():
     image_frame=Frame(root,bd=3,bg=back_ground,width=150,height=170,relief="groove")
     image_frame.place(x=20,y=80)
 
-    img1=(Image.open("image.png"))
+    img1=(Image.open("Program PNG's\image.png"))
     resized_image=img1.resize((150,170))
     photo2=ImageTk.PhotoImage(resized_image)
-    stud_image=PhotoImage(file="image.png")
+    stud_image=PhotoImage(file="Program PNG's\image.png")
     stud_image_label=Label(image_frame,image=photo2)
     stud_image_label.pack()   
 
@@ -264,8 +265,8 @@ def student_window3():
                 # SMTP Configuration
                 smtp_server = "smtp.gmail.com"
                 smtp_port = 587  # TLS Port
-                smtp_username = "minehope16@gmail.com"  # Update with your email
-                smtp_password = "lhtjdviuanqumahw"  # Update with your password
+                smtp_username = "shilpakondhalkar18@gmail.com"  # Update with your email
+                smtp_password = "rkntvzjepmmvjtlp"  # Update with your password
 
                 # Create SMTP connection
                 with smtplib.SMTP(smtp_server, smtp_port) as server:
@@ -331,7 +332,7 @@ def student_window3():
         l1.pack(pady=20,fill=X)
 
         # Load an image file
-        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
         back_arrow_image=back_arrow_image.subsample(15,15)
         # Keep a reference of the photo image
         win1.back_arrow_image = back_arrow_image
@@ -485,7 +486,7 @@ def student_window3():
         l1.pack(pady=5)
 
         # Load an image file
-        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
         back_arrow_image=back_arrow_image.subsample(15,15)
         # Keep a reference of the photo image
         win1.back_arrow_image = back_arrow_image
@@ -554,7 +555,7 @@ def student_window3():
         lblank1.pack()
 
         # Load an image file
-        back_arrow_image = PhotoImage(file="BackArrow.png")
+        back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
         back_arrow_image=back_arrow_image.subsample(15,15)
         # Keep a reference of the photo image
         win1.back_arrow_image = back_arrow_image
@@ -562,11 +563,11 @@ def student_window3():
         button = Button(win1, image=win1.back_arrow_image, bg="LightBlue", borderwidth=0, relief='flat', activebackground="LightBlue", command=lambda: [destry(), student_window3()])
         button.place(x=8, y=8)
 
-        update_image1=PhotoImage(file="bell.png")
+        update_image1=PhotoImage(file="Program PNG's\bell.png")
         update_image1=update_image1.subsample(3,3)
         update_button=Button(win1,image=update_image1,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=300,y=80)
 
-        update_image11=PhotoImage(file="bell.png")
+        update_image11=PhotoImage(file="Program PNG's\bell.png")
         update_image11=update_image11.subsample(3,3)
         update_button=Button(win1,image=update_image11,bg="LightBlue",relief=FLAT,activebackground="LightBlue").place(x=30,y=80)
 
@@ -604,7 +605,7 @@ def student_window3():
         address_var.set(" ")
         reg_var.set(" ")
         search.set("")
-        img1=(Image.open("image.png"))
+        img1=(Image.open("Program PNG's\image.png"))
         resized_image=img1.resize((150,170))
         photo2=ImageTk.PhotoImage(resized_image)
         stud_image_label.config(image=photo2)
@@ -644,7 +645,7 @@ def student_window3():
                     
         
         except FileNotFoundError as v:
-            img=(Image.open("image.png"))
+            img=(Image.open("Program PNG's\image.png"))
             resized_image=img.resize((150,170))
             photo2=ImageTk.PhotoImage(resized_image)
             stud_image_label.config(image=photo2)
@@ -702,13 +703,13 @@ def student_window3():
     #Search Box to Fetch
     search=IntVar()
     search_entry=Entry(root,textvariable=search,width=20,bd=2,font="cambria 12").place(x=680,y=70)
-    search_icon=PhotoImage(file="search.png")
+    search_icon=PhotoImage(file="Program PNG's\search.png")
     search_icon_resized=search_icon.subsample(30,30)
     # Keep a reference of the photo image
     root.search_icon_resized = search_icon_resized
     search_button=Button(root,text="Search",compound=LEFT,image=search_icon_resized,width=70,font="cambria 10",command=search_stud).place(x=830,y=70)
 
-    logout=PhotoImage(file="logout.png")
+    logout=PhotoImage(file="Program PNG's\logout.png")
     logout=logout.subsample(15,15)
     logout_button=Button(root,image=logout,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=logO).place(x=10,y=25)
 
@@ -758,7 +759,7 @@ def student_window3():
     address_label=Label(frame,text="Address",bg=back_ground,fg="Black",font="cambria 14").place(x=20,y=222)
     aadhaar_label_entry=Entry(frame,textvariable=address_var,width=50,font="cambria 12",state="readonly").place(x=170,y=222)
 
-    update_image=PhotoImage(file="bell.png")
+    update_image=PhotoImage(file="Program PNG's\bell.png")
     update_image=update_image.subsample(15,15)
     update_button=Button(frame,image=update_image,bg="LightBlue",relief=FLAT,activebackground="LightBlue",command=lambda:[root.destroy(),check_pass(roll_no_var.get(),email_var.get())]).place(x=790,y=230)
 
@@ -767,10 +768,10 @@ def student_window3():
     image_frame=Frame(root,bd=3,bg=back_ground,width=150,height=170,relief="groove")
     image_frame.place(x=20,y=80)
 
-    img1=(Image.open("image.png"))
+    img1=(Image.open("Program PNG's\image.png"))
     resized_image=img1.resize((150,170))
     photo2=ImageTk.PhotoImage(resized_image)
-    stud_image=PhotoImage(file="image.png")
+    stud_image=PhotoImage(file="Program PNG's\image.png")
     stud_image_label=Label(image_frame,image=photo2)
     stud_image_label.pack()
 
@@ -887,7 +888,7 @@ def student_window2():
     l1.pack(pady=5)
     
     # Load an image file
-    logout_image1 = PhotoImage(file="logout.png")
+    logout_image1 = PhotoImage(file="Program PNG's\logout.png")
     logout_image1=logout_image1.subsample(15,15)
     # Keep a reference of the photo image
     win1.logout_image1 = logout_image1
@@ -896,7 +897,7 @@ def student_window2():
     button.place(x=5, y=65)
 
     # Load an image file
-    logout_image2 = PhotoImage(file="delete_user.png")
+    logout_image2 = PhotoImage(file="Program PNG's\delete_user.png")
     logout_image2=logout_image2.subsample(14,14)
     # Keep a reference of the photo image
     win1.logout_image2 = logout_image2
@@ -905,15 +906,15 @@ def student_window2():
     button.place(x=460, y=65)
 
     #Image for Student and Institue Login    
-    student_image=(Image.open("student_info.png"))
+    student_image=(Image.open("Program PNG's\student_info.png"))
     resized_image=student_image.resize((80,80))
     photo1=ImageTk.PhotoImage(resized_image)    
     
-    edit_image=(Image.open("edit.png"))
+    edit_image=(Image.open("Program PNG's\edit.png"))
     resized_image=edit_image.resize((80,80))
     photo3=ImageTk.PhotoImage(resized_image)
 
-    notification_image=(Image.open("notification.png"))
+    notification_image=(Image.open("Program PNG's\notification.png"))
     resized_image=notification_image.resize((80,80))
     photo2=ImageTk.PhotoImage(resized_image) 
     
@@ -1019,7 +1020,7 @@ def student_window1():
     root.maxsize(600, 700)
 
     # Back Arrow
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     root.back_arrow_image = back_arrow_image
@@ -1033,7 +1034,7 @@ def student_window1():
     frame.place(anchor=NW, x=50, y=100)
 
     # Inserting an image
-    image1 = PhotoImage(file="logopp.png")
+    image1 = PhotoImage(file="Program PNG's\logopp.png")
     image1 = image1.subsample(18, 18)
     image_label = Label(root, text="Student Info", font="times 14 bold", image=image1, bg="LightBlue", fg="Gray30", compound=TOP)
     image_label.pack(pady=8)
@@ -1242,7 +1243,7 @@ def login_window():
     blabel3.pack(pady=15)
 
     # Back Arrow
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(18,18)
     # Keep a reference of the photo image
     rootk.back_arrow_image = back_arrow_image
@@ -1294,7 +1295,7 @@ def register_window():
     root.maxsize(600,600)
     
     # Back Arrow
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     root.back_arrow_image = back_arrow_image
@@ -1392,7 +1393,7 @@ def register_window():
                             blabel3.pack(pady=5)
 
                             # Back Arrow
-                            back_arrow_image = PhotoImage(file="BackArrow.png")
+                            back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
                             back_arrow_image=back_arrow_image.subsample(18,18)
                             # Keep a reference of the photo image
                             rootk.back_arrow_image = back_arrow_image
@@ -1585,7 +1586,7 @@ def register_window():
 
     ########## Register Controlls #########
     # Inserting an image
-    image1 = PhotoImage(file="logo.png")
+    image1 = PhotoImage(file="Program PNG's\logo.png")
     image1 = image1.subsample(18, 18)
     image_label = Label(root, text="REGISTER", font="times 12 bold", image=image1, bg="lightblue", compound=TOP)
     image_label.pack(pady=8)
@@ -1698,7 +1699,7 @@ def ins_login():
 
 
     # Back Arrow
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(18,18)
     # Keep a reference of the photo image
     rootk.back_arrow_image = back_arrow_image
@@ -1748,7 +1749,7 @@ def app_window2():
     win1.maxsize(500,280)
     
     # Load an image file
-    back_arrow_image = PhotoImage(file="BackArrow.png")
+    back_arrow_image = PhotoImage(file="Program PNG's\BackArrow.png")
     back_arrow_image=back_arrow_image.subsample(15,15)
     # Keep a reference of the photo image
     win1.back_arrow_image = back_arrow_image
@@ -1821,8 +1822,8 @@ def app_window1():
     l1.pack(pady=40)
         
     #Image for Student and Institue Login
-    student_image = PhotoImage(file='Student.png')
-    institute_image = PhotoImage(file='College.png')
+    student_image = PhotoImage(file="Program PNG's\Student.png")
+    institute_image = PhotoImage(file="Program PNG's\College.png")
         
     #Button for Student and Institute Login
     student_button = Button(win1, image=student_image, text="Student Login", bg="LightBlue", borderwidth=0, activebackground="LightBlue")
